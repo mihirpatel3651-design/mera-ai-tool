@@ -1,34 +1,32 @@
 import streamlit as st
 import google.generativeai as genai
 
-# Setup
-st.set_page_config(page_title="ViralAI - Paisa Kamao", layout="centered")
-st.title("🚀 ViralAI: Content Likho, Paise Kamao")
+# Site ka Title
+st.set_page_config(page_title="ViralAI - Captions", layout="centered")
+st.title("🚀 ViralAI: Viral Captions & Hashtags")
 
-# Yahan apni Gemini API Key dalein
-genai.configure(api_key="YOUR_GEMINI_API_KEY")
-model = genai.GenerativeModel('gemini-1.5-flash')
+# Google API Key setup (Secrets se uthayega)
+try:
+    genai.configure(api_key=st.secrets["GOOGLE_API_KEY"])
+    model = genai.GenerativeModel('gemini-1.5-flash')
+except:
+    st.error("API Key missing! Please add it in Streamlit Secrets.")
 
 # Input Section
-st.subheader("Apna Topic Likho")
-topic = st.text_input("Example: Best food in Surat, Gym motivation, etc.")
-platform = st.selectbox("Platform Select Karein", ["Instagram Reel", "YouTube Video", "Twitter (X)"])
+topic = st.text_input("Apna Topic Likho (e.g. Surat food tour)")
+platform = st.selectbox("Platform Chuno", ["Instagram", "YouTube", "Twitter"])
 
-if st.button("Viral Content Generate Karo"):
+if st.button("Generate Karo ✨"):
     if topic:
-        with st.spinner('AI Dimag laga raha hai...'):
-            prompt = f"Write a viral, engaging {platform} caption and 10 trending hashtags for: {topic}. Keep it catchy!"
+        with st.spinner('AI soch raha hai...'):
+            prompt = f"Write a viral {platform} caption and hashtags for: {topic}"
             response = model.generate_content(prompt)
-            
             st.success("Aapka Content Taiyar Hai!")
             st.write(response.text)
-            
-            st.info("💡 Tip: Is content ko bech kar ya use karke views badhao!")
     else:
-        st.warning("Pehle kuch likho toh sahi!")
+        st.warning("Pehle topic toh likho!")
 
-# Subscription Link (Example)
-st.sidebar.title("Premium Plan")
-st.sidebar.write("Unlimited access ke liye sirf ₹199 dein.")
-if st.sidebar.button("Upgrade Now"):
-    st.sidebar.write("Payment Gateway Link Yahan Ayega")
+# Sidebar for Payment
+st.sidebar.header("Premium Plan")
+st.sidebar.write("Unlimited access ke liye ₹49 dein.")
+st.sidebar.write("UPI ID: aapka-naam@upi")
