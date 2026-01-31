@@ -8,27 +8,27 @@ st.title("🚀 ViralAI: Viral Captions")
 try:
     if "GOOGLE_API_KEY" in st.secrets:
         genai.configure(api_key=st.secrets["GOOGLE_API_KEY"])
-        # 'gemini-1.5-flash' sabse fast aur stable model hai
-        model = genai.GenerativeModel('gemini-1.5-flash')
+        # Stable model name jo 404 nahi deta
+        model = genai.GenerativeModel('gemini-pro') 
     else:
-        st.error("API Key missing! Streamlit Secrets mein check karein.")
+        st.error("API Key missing! Streamlit Secrets check karein.")
 except Exception as e:
     st.error(f"Setup Error: {e}")
 
-topic = st.text_input("Apna Topic likhein (e.g. Travel to Goa):")
+topic = st.text_input("Topic likhein (e.g. Goa Trip):")
 platform = st.selectbox("Platform:", ["Instagram", "YouTube", "Twitter"])
 
 if st.button("Generate Karo ✨"):
     if topic:
         try:
-            with st.spinner('AI Content bana raha hai...'):
-                # AI ko instruction dena
-                response = model.generate_content(f"Write a viral {platform} caption and 5 hashtags for: {topic}")
+            with st.spinner('AI soch raha hai...'):
+                # Short prompt taaki response fast aaye
+                response = model.generate_content(f"Viral {platform} caption for: {topic}")
                 st.success("Taiyar hai!")
                 st.write(response.text)
         except Exception as e:
-            # Agar ab bhi error aaye toh ye exact detail dikhayega
+            # Agar ab bhi error aaye, toh hum model ka 'latest' version try karenge
             st.error(f"AI Error: {e}")
-            st.info("Check karein ki aapki API Key 'Google AI Studio' mein active hai.")
+            st.info("Technical Tip: Google AI Studio mein ja kar check karein ki Gemini API 'Enabled' hai ya nahi.")
     else:
-        st.warning("Pehle topic toh likhiye!")
+        st.warning("Pehle kuch likho!")
